@@ -27,7 +27,8 @@ export const App: React.FC = () => {
     const resolveRoute = () => {
       const hostname = window.location.hostname;
       const pathname = window.location.pathname.replace(/^\/+|\/+$/g, '');
-      const hash = window.location.hash.replace(/^#\/?/, '');
+      const rawHash = window.location.hash;
+      const hash = rawHash.replace(/^#\/?/, '');
       const urlParams = new URLSearchParams(window.location.search);
       const queryClient = urlParams.get('client') || urlParams.get('p') || urlParams.get('c');
       const pureParam = urlParams.get('pure') === '1' || urlParams.get('standalone') === 'true' || urlParams.get('preview') === '0';
@@ -72,10 +73,21 @@ export const App: React.FC = () => {
           if (pureParam) setIsStandalone(true);
           return;
         }
+
+        // If hash is an in-page anchor (e.g. #about, #rituals, #contact) and we already have an active client, PRESERVE IT and scroll!
+        if (activeClient) {
+          const el = document.getElementById(hash);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth' });
+          }
+          return;
+        }
       }
 
-      // Default: Hub
-      setActiveClient(null);
+      // Default: If no valid client found and no active client, show Hub
+      if (!activeClient) {
+        setActiveClient(null);
+      }
     };
 
     resolveRoute();
@@ -85,7 +97,7 @@ export const App: React.FC = () => {
       window.removeEventListener('hashchange', resolveRoute);
       window.removeEventListener('popstate', resolveRoute);
     };
-  }, []);
+  }, [activeClient]);
 
   const handleSelectClient = (client: TopClientDetails) => {
     setActiveClient(client);
@@ -105,11 +117,14 @@ export const App: React.FC = () => {
     return <NavigationHub onSelectClient={handleSelectClient} />;
   }
 
-  // If client selected, render the specific bespoke landing page
+  // If client selected, render pure clean standalone landing page
   const LandingComponent = LANDING_COMPONENTS[activeClient.slug] || (() => <div>Landing not found</div>);
 
-  // If in Pure Standalone mode (shared directly with the customer as their official site)
-  if (isStandalone) {
+  // Check if admin switcher is explicitly requested via ?switcher=1
+  const urlParams = new URLSearchParams(window.location.search);
+  const showSwitcher = urlParams.get('switcher') === '1' || urlParams.get('admin') === '1';
+
+  if (!showSwitcher) {
     return (
       <div className="min-h-screen bg-black">
         <LandingComponent />
@@ -119,7 +134,7 @@ export const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-950 flex flex-col">
-      {/* Top Persistent Switcher Bar */}
+      {/* Top Persistent Switcher Bar (Only visible when ?switcher=1) */}
       <ClientSwitcherBar
         currentClient={activeClient}
         onSelectClient={handleSelectClient}
@@ -128,7 +143,6 @@ export const App: React.FC = () => {
         onChangeViewMode={setViewMode}
       />
 
-      {/* Landing Viewport Container (supports responsive device preview modes) */}
       <main className="flex-1 flex justify-center bg-slate-950">
         <div
           className={`w-full transition-all duration-300 ${

@@ -237,6 +237,47 @@ export const AdatBarbershop: React.FC = () => {
         </div>
       </section>
 
+      {/* Cosmetics Showcase (Morgan's London) */}
+      <section id="cosmetics" className="py-20 px-6 max-w-7xl mx-auto border-b border-zinc-800">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="lg:col-span-6 space-y-6">
+            <span className="text-xs font-cinzel font-bold text-amber-500 uppercase tracking-wider block">Официальная косметика</span>
+            <h2 className="text-2xl sm:text-4xl font-bold text-white font-cinzel">
+              Morgan's Pomade — Британские традиции с 1873 года
+            </h2>
+            <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+              Мы используем исключительно оригинальную британскую косметику <strong>Morgan's Pomade</strong>. Натуральные масла бергамота, пачули, сандала и кедра питают волосы и кожу лица, придавая благородный ненавязчивый аромат истинного джентльмена.
+            </p>
+            <div className="grid grid-cols-2 gap-4 pt-2 font-cinzel text-xs">
+              <div className="p-4 rounded-xl border border-zinc-800 bg-[#16161A]">
+                <div className="font-bold text-amber-400 text-sm mb-1">Матовые пасты и глины</div>
+                <p className="text-slate-400 font-sans text-[11px]">Естественная фиксация без блеска и склеивания волос.</p>
+              </div>
+              <div className="p-4 rounded-xl border border-zinc-800 bg-[#16161A]">
+                <div className="font-bold text-amber-400 text-sm mb-1">Масла для бороды</div>
+                <p className="text-slate-400 font-sans text-[11px]">Смягчение жесткой щетины и снятие раздражения после бритья.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-6 p-8 rounded-3xl bg-[#141418] border border-amber-600/30 space-y-4">
+            <div className="text-amber-400 font-cinzel font-bold text-lg">Приобретение домашнего ухода</div>
+            <p className="text-slate-300 text-xs leading-relaxed">
+              Все средства, используемые мастером во время вашего ритуала, можно приобрести у администратора клуба с персональным подбором под ваш тип волос и кожи.
+            </p>
+            <a
+              href={waUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded bg-zinc-900 border border-amber-600/50 hover:bg-amber-600 text-white font-cinzel text-xs font-bold transition"
+            >
+              <span>Уточнить наличие в WhatsApp</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* Direct Contact Section */}
       <section id="contact" className="py-20 px-6 max-w-7xl mx-auto">
         <div className="rounded-3xl border border-zinc-700 bg-[#141418] p-8 sm:p-12 text-white">
