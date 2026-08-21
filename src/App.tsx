@@ -112,9 +112,31 @@ export const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // If no client selected, render the main Showcase Navigation Hub
+  // If no client selected: check if admin hub is requested (?hub=1 / ?admin=1 / localhost)
   if (!activeClient) {
-    return <NavigationHub onSelectClient={handleSelectClient} />;
+    const urlParams = new URLSearchParams(window.location.search);
+    const isHubRequested = urlParams.get('hub') === '1' || urlParams.get('admin') === '1' || urlParams.get('secret') === '1';
+
+    if (isHubRequested) {
+      return <NavigationHub onSelectClient={handleSelectClient} />;
+    }
+
+    // Default neutral private splash (zero client mentions)
+    return (
+      <div className="min-h-screen bg-[#06080C] text-slate-400 flex flex-col items-center justify-center p-6 text-center font-mono selection:bg-cyan-500 selection:text-black">
+        <div className="max-w-md space-y-4 border border-slate-800/80 bg-[#0B0F17] p-8 rounded-2xl shadow-2xl">
+          <div className="inline-block px-3 py-1 rounded bg-slate-900 text-[10px] text-slate-500 tracking-widest uppercase">
+            Private Web Infrastructure
+          </div>
+          <h1 className="text-xl font-bold text-slate-200 font-sans">
+            Доступ по персональной ссылке
+          </h1>
+          <p className="text-xs text-slate-500 leading-relaxed font-sans">
+            Демонстрационные веб-макеты и посадочные страницы доступны исключительно по прямой ссылке для каждого проекта.
+          </p>
+        </div>
+      </div>
+    );
   }
 
   // If client selected, render pure clean standalone landing page
